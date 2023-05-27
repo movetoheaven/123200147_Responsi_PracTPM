@@ -23,13 +23,9 @@ class _ListMatchState extends State<ListMatch> {
       body: FutureBuilder(
         future: ApiDataSource.instance.loadMatches(),
         builder: (context, AsyncSnapshot<dynamic> snapshot){
-          if (snapshot.data == null) {
-            return _buildLoadingSection();
-          }
-          else if(!snapshot.hasData){
+          if (snapshot.hasError) {
             return _buildErrorSection();
-          }else{
-            // MatchesModel data = MatchesModel.fromJson(snapshot.data);
+          }if (snapshot.hasData) {
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (context, index){
@@ -42,6 +38,8 @@ class _ListMatchState extends State<ListMatch> {
               }
               
             );
+          } else {
+            return _buildLoadingSection();
           }
         },
         
